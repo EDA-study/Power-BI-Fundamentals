@@ -1,0 +1,8 @@
+>  km_측정값
+km_측정값 = AVERAGE(pitcher_mlb_korean[release_speed]) * 1.609
+
+> km_새 열 - 1차 시도
+km_새 열 = AVERAGE(pitcher_mlb_korean[release_speed]) * 1.609
+
+> km_새 열 - 2차 시도
+km_새 열 = pitcher_mlb_korean[release_speed] * 1.609
