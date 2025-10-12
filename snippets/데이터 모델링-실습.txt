@@ -1,0 +1,2 @@
+> 총 투구수 측정값
+총 투구수 = COUNTROWS(pitcher_mlb_korean)
