@@ -1,0 +1,44 @@
+> 타구 속도_km 측정값
+타구 속도_km = AVERAGE(batter_mlb_korean[launch_speed]) * 1.609
+
+> 배럴 타구율 측정값
+Barrel% = 
+VAR barrels = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[launch_speed_angle] == "6")
+VAR contacts = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[launch_speed_angle] <> "")
+
+RETURN
+    DIVIDE(barrels, contacts)
+
+> 안타 수 측정값
+H = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] IN {"single", "double", "triple", "home_run"})
+
+> 타수 측정값
+AB = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] IN {"double", "double_play", "field_error", "field_out", "fielders_choice", "fielders_choice_out", "force_out", "grounded_into_double_play", "home_run", "single", "strikeout", "strikeout_double_play", "triple"})
+
+> 타율 측정값
+AVG = DIVIDE([H], [AB])
+
+> 출루율 측정값
+OBP = 
+VAR BB = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] IN {"intent_walk", "walk"})
+VAR HBP = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] == "hit_by_pitch")
+VAR SF = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] IN {"sac_fly", "sac_fly_double_play"})
+
+RETURN
+    DIVIDE(
+        [H] + BB + HBP,
+        [AB] + BB + SF + HBP
+        )
+
+> 장타율 측정값
+SLG = 
+VAR TB = CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] == "single") +
+    CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] == "double") * 2 +
+    CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] == "triple") * 3 +
+    CALCULATE(COUNTROWS(batter_mlb_korean), batter_mlb_korean[events] == "home_run") * 4
+
+RETURN
+    DIVIDE(TB, [AB])
+
+> OPS 측정값
+OPS = [OBP] + [SLG]
